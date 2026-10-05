@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f7f5">
+  <title>Carewell | Appointment desk</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <script src="/static/app.js" defer></script>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <a class="brand" href="/" aria-label="Carewell home">
+        <span class="brand-mark" aria-hidden="true">✳</span>
+        <span>carewell<span class="brand-period">.</span></span>
+      </a>
+      <div class="side-label">WORKSPACE</div>
+      <a class="nav-link active" href="#schedule"><span aria-hidden="true">▦</span> Appointments</a>
+      <div class="sidebar-note">
+        <span class="secure-icon" aria-hidden="true">✳</span>
+        <strong>Your clinic, in sync.</strong>
+        <p>A calmer way to keep the day moving.</p>
+      </div>
+      <div class="sidebar-footer"><span class="status-dot"></span> Clinic desk <span class="staff-tag">STAFF</span></div>
+    </aside>
+
+    <main class="main-content" id="schedule">
+      <header class="topbar">
+        <div class="mobile-brand"><span class="brand-mark" aria-hidden="true">✳</span> carewell<span class="brand-period">.</span></div>
+        <div class="breadcrumb">Clinic desk <span>/</span> <strong>Appointments</strong></div>
+        <div class="user-avatar" aria-label="Staff account">CW</div>
+      </header>
+
+      <section class="page-heading">
+        <div>
+          <p class="eyebrow">YOUR FRONT DESK, AT A GLANCE</p>
+          <h1>Appointments</h1>
+          <p class="page-subtitle">A little more order to everyone’s day.</p>
+        </div>
+        <button class="button button-primary" id="new-appointment-button" type="button">
+          <span aria-hidden="true">＋</span> New appointment
+        </button>
+      </section>
+
+      <section class="date-toolbar" aria-label="Appointment date">
+        <div class="date-copy">
+          <span class="calendar-icon" aria-hidden="true">▦</span>
+          <div><span class="date-caption">SCHEDULE FOR</span><strong id="selected-date-label">Today</strong></div>
+        </div>
+        <div class="date-controls">
+          <button class="icon-button" type="button" id="previous-day" aria-label="Previous day">‹</button>
+          <input type="date" id="schedule-date" aria-label="Select appointment date">
+          <button class="icon-button" type="button" id="next-day" aria-label="Next day">›</button>
+          <button class="today-button" type="button" id="today-button">Today</button>
+        </div>
+      </section>
+
+      <section class="stats-grid" aria-label="Daily appointment summary">
+        <article class="stat-card">
+          <span class="stat-icon mint" aria-hidden="true">▦</span>
+          <div><span class="stat-label">DAILY TOTAL</span><strong id="total-count">—</strong></div>
+          <span class="stat-foot">appointments</span>
+        </article>
+        <article class="stat-card">
+          <span class="stat-icon lavender" aria-hidden="true">◷</span>
+          <div><span class="stat-label">NEXT APPOINTMENT</span><strong class="stat-time" id="next-up">—</strong></div>
+          <span class="stat-foot" id="next-up-doctor">No upcoming visits</span>
+        </article>
+        <article class="stat-card">
+          <span class="stat-icon peach" aria-hidden="true">✚</span>
+          <div><span class="stat-label">CARE TEAM</span><strong id="doctor-count">—</strong></div>
+          <span class="stat-foot">doctors available</span>
+        </article>
+      </section>
+
+      <section class="schedule-panel">
+        <div class="panel-heading">
+          <div><h2>Day schedule</h2><p id="schedule-description">A clear view of the day ahead.</p></div>
+          <span class="appointments-pill" id="appointment-count">0 APPOINTMENTS</span>
+        </div>
+        <div class="schedule-table-wrap">
+          <table>
+            <thead><tr><th>TIME</th><th>PATIENT</th><th>DOCTOR</th><th>SPECIALTY</th><th></th></tr></thead>
+            <tbody id="appointments-body"></tbody>
+          </table>
+          <div class="empty-state" id="empty-state" hidden>
+            <span class="empty-icon" aria-hidden="true">☼</span>
+            <strong>A little room in the day.</strong>
+            <p>No appointments on this date. Add one when you’re ready.</p>
+            <button class="button button-secondary" type="button" id="empty-add-button">＋ Add an appointment</button>
+          </div>
+        </div>
+      </section>
+      <footer class="page-footer"><span>Care starts with a little care.</span><span>CAREWELL CLINIC DESK</span></footer>
+    </main>
+  </div>
+
+  <dialog class="appointment-dialog" id="appointment-dialog" aria-labelledby="dialog-title">
+    <form id="appointment-form">
+      <div class="dialog-heading">
+        <div><p class="eyebrow">MAKE ROOM FOR CARE</p><h2 id="dialog-title">New appointment</h2></div>
+        <button class="icon-button close-button" type="button" id="close-dialog" aria-label="Close">×</button>
+      </div>
+      <p class="dialog-description">Add a patient to the clinic schedule.</p>
+      <div class="form-grid">
+        <label class="field field-full">Patient name <span class="required">*</span>
+          <input name="patient_name" autocomplete="name" maxlength="100" required placeholder="e.g. Alex Morgan">
+        </label>
+        <label class="field">Email address <span class="required">*</span>
+          <input name="patient_email" type="email" autocomplete="email" maxlength="254" required placeholder="alex@example.com">
+        </label>
+        <label class="field">Phone number <span class="optional">(optional)</span>
+          <input name="patient_phone" type="tel" autocomplete="tel" maxlength="30" placeholder="+1 555 010 2020">
+        </label>
+        <label class="field">Doctor <span class="required">*</span>
+          <select name="doctor_id" id="doctor-select" required></select>
+        </label>
+        <label class="field">Date <span class="required">*</span>
+          <input name="date" id="appointment-date" type="date" required>
+        </label>
+        <label class="field field-full">Appointment time <span class="required">*</span>
+          <select name="time" id="time-select" required></select>
+        </label>
+      </div>
+      <div class="form-message" id="form-message" role="alert" hidden></div>
+      <div class="dialog-actions">
+        <button class="button button-secondary" type="button" id="cancel-dialog">Cancel</button>
+        <button class="button button-primary" type="submit" id="save-appointment">Book appointment <span aria-hidden="true">→</span></button>
+      </div>
+    </form>
+  </dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

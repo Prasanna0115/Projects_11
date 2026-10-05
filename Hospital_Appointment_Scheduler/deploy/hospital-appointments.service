@@ -1,0 +1,27 @@
+[Unit]
+Description=Carewell clinic appointment scheduler
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/hospital-appointments
+EnvironmentFile=/etc/hospital-appointments.env
+Environment=APPOINTMENT_HOST=127.0.0.1
+Environment=APPOINTMENT_PORT=8000
+Environment=APPOINTMENT_DB_PATH=/var/lib/hospital-appointments/appointments.sqlite3
+ExecStart=/usr/bin/python3 /opt/hospital-appointments/app.py
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+ReadWritePaths=/var/lib/hospital-appointments
+
+[Install]
+WantedBy=multi-user.target
